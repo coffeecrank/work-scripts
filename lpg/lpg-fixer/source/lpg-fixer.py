@@ -46,6 +46,8 @@ class Cell:
                 self.instance.value = self.instance.value.replace('\\\'', '\'')
             if type(self.instance.value) == str and '\\xa0' in self.instance.value:
                 self.instance.value = self.instance.value.replace('\\xa0', ' ')
+            if type(self.instance.value) == str and '\\u2002' in self.instance.value:
+                self.instance.value = self.instance.value.replace('\\u2002', ' ')  
 
     def fix_cnow_characters(self):
         if not self.is_empty() and type(self.instance.value) == str:
