@@ -1,4 +1,4 @@
-# LPG Fixer v1.3
+# LPG Fixer v1.4
 
 ## What does it do?
 * Removes extra whitespace.
@@ -13,7 +13,7 @@
 * When prompted, paste the name of the LPG file including the XLSX extension (e.g. `Spielvogel_10e_LPG_2016_10.20.16.xlsx`) into the console window. To paste it into the console window, press `Alt` + `Space`, then press `E` and then press `P`.
 * Wait until you see `All set! Press ENTER to exit...` on the screen and press `Enter` to close the window.
 
-## What's new in 1.3?
+## What's new in 1.4?
 * Fixed a minor bug where one of the special characters appeared in cells after conversion.
 
 ## Source
