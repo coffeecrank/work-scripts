@@ -37,7 +37,7 @@ def main():
         jpg_path = path + '.jpg'
         vtt_path = path + '.vtt'
         txt_path = path + '.txt'
-        text = template.replace('VIDEO_FOLDER_NAME', short_name)
+        text = template.replace('VIDEO_FOLDER_NAME', 'a' + short_name)
         text = text.replace('MP4_PATH', mp4_path)
         text = text.replace('JPG_PATH', jpg_path)
         text = text.replace('VTT_PATH', vtt_path)
