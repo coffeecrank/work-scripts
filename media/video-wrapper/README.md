@@ -1,4 +1,4 @@
-# Video Wrapper v1.0
+# Video Wrapper v1.1
 
 ## What does it do?
 * Generates HTML "wrappers" for videos which you can use in CNow and any apps supporting <iframe></iframe> tags.
@@ -12,6 +12,9 @@
 * The script will prompt you for a Wowza path. Type in the path for the video composite folder on Wowza (with or without last forward slash) and press `Enter`.
 * The script will ask you whether your videos are all in the same folder or in their own individual folders. Answer `Y` or `N` and press `Enter`.
 * After the script is done, you can press `Enter` again to exit, and you will see a bunch of HTML wrappers (or folders containing HTML wrappers) generated.
+
+## What's new in 1.1?
+* Fixed a bug where video names starting with a digit caused an error.
 
 ## Source
 You can view the source code [here](/media/video-wrapper/source/video-wrapper.py).
