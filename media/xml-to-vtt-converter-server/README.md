@@ -1,4 +1,4 @@
-# XML to VTT converter (server version) v1.4
+# XML to VTT converter (server version) v1.5
 
 ## What does it do?
 * Converts ADB.XML closed captions into VTT closed captions. 
@@ -16,8 +16,8 @@
 * Since the script runs in real time, you can minimize the console window (don't close it) and keep it in the background. Ideally, the script should be run on the computer that's online 24/7. 
 * You don't need to restart the script, and you can remove source files and converted files at any time.
 
-## What's new in 1.4?
-* Added support for didderent time stamp formats.
+## What's new in 1.5?
+* Added support for handling more unusual time stamps.
 
 ## Source
 You can view the source code [here](/media/xml-to-vtt-converter-server/source/xml-to-vtt-converter-server.py).

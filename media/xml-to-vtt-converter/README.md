@@ -1,4 +1,4 @@
-# XML to VTT converter (standalone version) v1.4
+# XML to VTT converter (standalone version) v1.5
 
 ## What does it do?
 * Converts ADB.XML closed captions into VTT closed captions.
@@ -11,8 +11,8 @@
 * If some of the files are badly formatted, you'll see a subfolder `badly-formatted-xml` appear containing these files.
 * Wait until the console window closes and don't close it yourself.
 
-## What's new in 1.4?
-* Added support for didderent time stamp formats.
+## What's new in 1.5?
+* Added support for handling more unusual time stamps.
 
 ## Source
 You can view the source code [here](/media/xml-to-vtt-converter/source/xml-to-vtt-converter.py).
