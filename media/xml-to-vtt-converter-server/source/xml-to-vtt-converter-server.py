@@ -2,6 +2,7 @@ import os
 import time
 import html
 import codecs
+import traceback
 
 class Input:
     def __init__(self, path):
@@ -68,39 +69,48 @@ class Input:
         output_file.write(begin_times, end_times, strings)
 
     def format_time(self, time):
-        time_array = ['0', '0', ':', '0', '0', ':', '0', '0', '.', '0', '0', '0']
-        start_idx = time_array.index('.') + 1
-        current_idx = start_idx
-        for idx, char in enumerate(time[::-1]):
-            if idx == len(time) - 1:
-                break_idx = -1
-                for i, n in enumerate(time):
-                    if i > len(time) - 1 - idx and (n == ':' or n == '.'):
-                        break_idx = i
-                        break
-                for digit in time[break_idx - 1::-1]:
-                    time_array[current_idx] = digit
-                    current_idx -= 1
-            elif char == '.':
-                for digit in time[len(time) - idx:]:
-                    time_array[current_idx] = digit
-                    current_idx += 1
-                start_idx -= 2
-                current_idx = start_idx
-            elif char == ':':
-                break_idx = -1
-                for i, n in enumerate(time):
-                    if i > len(time) - 1 - idx and (n == ':' or n == '.'):
-                        break_idx = i
-                        break
-                for digit in time[break_idx - 1:len(time) - 1 - idx:-1]:
-                    time_array[current_idx] = digit
-                    current_idx -= 1
-                start_idx -= 3
-                current_idx = start_idx
-        formatted_time = ''
-        for char in time_array: formatted_time += char
-        return formatted_time
+        time_cur_idx = time.find('.')
+        template = '00:00:00.000'
+        template_cur_idx = template.find('.')
+        if time_cur_idx != -1:
+            template = template[:template_cur_idx + 1] + self.add_zeroes(time[time_cur_idx + 1:], template[template_cur_idx + 1:], True)
+        else:
+            time_cur_idx = len(time)
+        if ':' in time:
+            time_prev_idx = time_cur_idx
+            time_cur_idx = len(time) - 1 - time[::-1].find(':')
+            template_prev_idx = template_cur_idx
+            template_cur_idx = len(template) - 1 - template[::-1].find(':')
+            template = template[:template_cur_idx + 1] + self.add_zeroes(time[time_cur_idx + 1:time_prev_idx], template[template_cur_idx + 1:template_prev_idx], False) + template[template_prev_idx:]
+            while ':' in time[:time_cur_idx]:
+                time_prev_idx = time_cur_idx
+                time_cur_idx = len(time) - 1 - time[::-1].find(':', len(time) - 1 - time_cur_idx + 1)
+                template_prev_idx = template_cur_idx
+                template_cur_idx = len(template) - 1 - template[::-1].find(':', len(template) - 1 - template_cur_idx + 1)
+                template = template[:template_cur_idx + 1] + self.add_zeroes(time[time_cur_idx + 1:time_prev_idx], template[template_cur_idx + 1:template_prev_idx], False) + template[template_prev_idx:]
+            template_prev_idx = template_cur_idx
+            if ':' in template[:template_cur_idx]:
+                template_cur_idx = len(template) - 1 - template[::-1].find(':', len(template) - 1 - template_cur_idx + 1)
+            else:
+                template_cur_idx = -1
+            if template_cur_idx == -1:
+                template = self.add_zeroes(time[:time_cur_idx], template[:template_prev_idx], False) + template[template_prev_idx:]
+            else:
+                template = template[:template_cur_idx + 1] + self.add_zeroes(time[:time_cur_idx], template[template_cur_idx + 1:template_prev_idx], False) + template[template_prev_idx:]
+        else:
+            template_prev_idx = template_cur_idx
+            template_cur_idx = len(template) - 1 - template[::-1].find(':')
+            template = template[:template_cur_idx + 1] + self.add_zeroes(time[:time_cur_idx], template[template_cur_idx + 1:template_prev_idx], False) + template[template_prev_idx:]
+        return template
+
+    def add_zeroes(self, string, template, add_to_end):
+        length_difference = len(template) - len(string)
+        zeros_to_add = '0' * length_difference
+        if add_to_end:
+            new_string = string + zeros_to_add
+        else:
+            new_string = zeros_to_add + string
+        return new_string
 
     def get_end_time(self, begin_time, dur_time):
         end_time_array = ['0', '0', ':', '0', '0', ':', '0', '0', '.', '0', '0', '0']
@@ -142,7 +152,9 @@ def main():
     output_dir = 'vtt'
     output_ext = '.vtt'
     bad_format_dir = os.path.join(input_dir, 'badly-formatted-xml')
-    timer = 60
+    timer = 10
+
+    print('Put the ADB.XML files into the \"xml\" folder and grab the converted files from the \"vtt\" folder. The converter will run once every 10 seconds, so you can keep this window open.\n')
     
     running = True
     while running:
@@ -154,10 +166,17 @@ def main():
             input_file = Input(os.path.join(root_path, input_dir, file))
             input_file.read_and_check()
             if input_file.is_bad():
+                print('Processing ' + file + '... Errors found!')
                 if not os.path.exists(bad_format_dir): os.makedirs(bad_format_dir)
                 input_file.move(input_dir, bad_format_dir)
-            else: input_file.convert(input_ext, output_ext, input_dir, output_dir)
+            else:
+                print('Processing ' + file + '... Done!')
+                input_file.convert(input_ext, output_ext, input_dir, output_dir)
         time.sleep(timer)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except:
+        traceback.print_exc()
+    input('\nPress ENTER to exit...')
